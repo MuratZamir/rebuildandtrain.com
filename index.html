@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Rebuild - Recovery and training, built on your own data</title>
+<meta name="description" content="Rebuild is a recovery and training app for triathletes, runners, and hybrid athletes. Daily readiness, structured plans, and an AI coach grounded in your own sleep, HRV, and training data.">
+<style>
+  :root {
+    --bg: #07070a;
+    --card: #131318;
+    --card-2: #1a1a21;
+    --text: #f2f2f5;
+    --muted: #9a9aa5;
+    --accent: #fb4d5c;
+    --accent-soft: rgba(251, 77, 92, 0.12);
+    --green: #34d399;
+    --radius: 20px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 1.25rem; }
+
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: rgba(7, 7, 10, 0.8);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 0; }
+  .logo { font-weight: 800; font-size: 1.2rem; letter-spacing: -0.02em; text-decoration: none; color: var(--text); }
+  .logo span { color: var(--accent); }
+  nav .links a {
+    color: var(--muted); text-decoration: none; margin-left: 1.4rem; font-size: 0.92rem;
+  }
+  nav .links a:hover { color: var(--text); }
+
+  .hero { padding: 4.5rem 0 3rem; display: grid; grid-template-columns: 1.2fr 1fr; gap: 3rem; align-items: center; }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.1rem); line-height: 1.12; letter-spacing: -0.03em; font-weight: 800; }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p.sub { color: var(--muted); margin: 1.2rem 0 1.8rem; font-size: 1.08rem; max-width: 34rem; }
+  .badge {
+    display: inline-block; background: var(--accent-soft); color: var(--accent);
+    font-size: 0.8rem; font-weight: 600; padding: 0.3rem 0.75rem; border-radius: 999px; margin-bottom: 1.1rem;
+  }
+  .cta { display: inline-block; background: var(--accent); color: #fff; text-decoration: none;
+    font-weight: 700; padding: 0.8rem 1.5rem; border-radius: 12px; }
+  .cta.secondary { background: var(--card-2); color: var(--text); margin-left: 0.6rem; }
+  .hero-note { display: block; color: var(--muted); font-size: 0.85rem; margin-top: 0.8rem; }
+
+  .phone {
+    border-radius: 42px; border: 6px solid #26262e; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(255, 255, 255, 0.05);
+    background: #000; line-height: 0; max-width: 320px; margin: 0 auto;
+  }
+  .phone img { width: 100%; height: auto; display: block; }
+
+  section { padding: 3.5rem 0; }
+  .kicker { color: var(--accent); font-weight: 700; text-transform: uppercase; font-size: 0.78rem; letter-spacing: 0.12em; }
+  h2 { font-size: clamp(1.5rem, 3.5vw, 2.1rem); letter-spacing: -0.02em; margin: 0.4rem 0 0.6rem; }
+  .lead { color: var(--muted); max-width: 44rem; }
+
+  .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.1rem; margin-top: 2rem; }
+  .card {
+    background: var(--card); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius); padding: 1.5rem;
+  }
+  .card .icon { font-size: 1.6rem; margin-bottom: 0.7rem; display: block; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 0.4rem; }
+  .card p { color: var(--muted); font-size: 0.92rem; }
+
+  .shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; margin-top: 2.5rem; }
+  .shot { text-align: center; }
+  .shot .phone { max-width: 280px; }
+  .shot h4 { margin: 1.1rem 0 0.25rem; font-size: 1rem; }
+  .shot p { color: var(--muted); font-size: 0.88rem; max-width: 18rem; margin: 0 auto; }
+
+  .sources { display: flex; flex-wrap: wrap; gap: 0.7rem; margin-top: 1.6rem; }
+  .pill {
+    background: var(--card-2); border: 1px solid rgba(255, 255, 255, 0.07);
+    padding: 0.5rem 1rem; border-radius: 999px; font-size: 0.9rem; color: var(--text);
+  }
+  .pill small { color: var(--muted); }
+
+  .privacy-strip {
+    background: var(--card); border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: var(--radius); padding: 2rem; margin-top: 1rem;
+    display: flex; gap: 1.5rem; align-items: flex-start;
+  }
+  .privacy-strip .icon { font-size: 2rem; }
+  .privacy-strip p { color: var(--muted); font-size: 0.95rem; }
+  .privacy-strip a { color: var(--accent); }
+
+  footer { border-top: 1px solid rgba(255, 255, 255, 0.06); padding: 2.5rem 0 3rem; margin-top: 2rem; }
+  footer .cols { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 1.5rem; }
+  footer p, footer a { color: var(--muted); font-size: 0.9rem; }
+  footer a { text-decoration: none; }
+  footer a:hover { color: var(--text); }
+
+  @media (max-width: 860px) {
+    .hero { grid-template-columns: 1fr; text-align: center; padding-top: 3rem; }
+    .hero p.sub { margin-left: auto; margin-right: auto; }
+    .grid { grid-template-columns: 1fr 1fr; }
+    .shots { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 540px) {
+    .grid { grid-template-columns: 1fr; }
+    nav .links a { margin-left: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav>
+      <a class="logo" href="/">Re<span>build</span></a>
+      <div class="links">
+        <a href="#features">Features</a>
+        <a href="#app">The app</a>
+        <a href="#recovery">Recovery</a>
+        <a href="#data">Your data</a>
+        <a href="/privacy/">Privacy</a>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <div class="hero">
+      <div>
+        <span class="badge">Now in TestFlight beta</span>
+        <h1>Recover smarter.<br>Train <em>harder</em>.</h1>
+        <p class="sub">Rebuild turns the data your watch already collects - sleep, HRV, resting heart rate, training load - into a daily readiness picture, structured training plans, and coaching that actually knows you.</p>
+        <a class="cta" href="mailto:muratzamir@rebuildandtrain.com?subject=Rebuild%20beta%20access">Request beta access</a>
+        <a class="cta secondary" href="#app">See the app</a>
+        <span class="hero-note">Built for triathletes, runners, and hybrid athletes - including the ones coming back from injury.</span>
+      </div>
+      <div class="phone"><img src="assets/today.png" alt="Rebuild Today screen showing a sleep score of 97 with resting HRV, resting heart rate, steps, and calorie metrics" width="1206" height="2622"></div>
+    </div>
+
+    <section id="features">
+      <span class="kicker">What Rebuild does</span>
+      <h2>One app for the whole athlete</h2>
+      <p class="lead">Rebuild started as a personal project: an app to guide one athlete's return to sport after knee surgery, using nothing but the data his watch was already recording. It grew into a full recovery and training platform.</p>
+      <div class="grid">
+        <div class="card">
+          <span class="icon">&#128308;</span>
+          <h3>Daily readiness</h3>
+          <p>Sleep score, HRV, resting heart rate, and last night's sleep stages in one glance, so you know whether today is a day to push or a day to absorb.</p>
+        </div>
+        <div class="card">
+          <span class="icon">&#128200;</span>
+          <h3>Trends that mean something</h3>
+          <p>Recovery pairs like HRV vs resting HR, sleep stages, and training load over 7, 14, or 30 days, with plain-language explanations under every chart.</p>
+        </div>
+        <div class="card">
+          <span class="icon">&#127937;</span>
+          <h3>Structured training plans</h3>
+          <p>Race-day plans for triathlon, running, and hybrid events: periodized weeks, zone targets, fueling cues, and a calendar that tracks adherence.</p>
+        </div>
+        <div class="card">
+          <span class="icon">&#129657;</span>
+          <h3>Return-to-sport guardrails</h3>
+          <p>Post-injury programs with checkpoints that flag when the day's recovery data suggests backing off, so rehab does not turn into re-injury.</p>
+        </div>
+        <div class="card">
+          <span class="icon">&#129302;</span>
+          <h3>An AI coach that knows you</h3>
+          <p>Ask anything. The coach answers from your actual workouts, sleep, and plan - and can reshuffle your week when your legs disagree with the schedule.</p>
+        </div>
+        <div class="card">
+          <span class="icon">&#128218;</span>
+          <h3>Learn as you train</h3>
+          <p>A built-in knowledge base on zones, intervals, fueling, strength, and periodization, sourced and cited, one tap from your plan.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="app">
+      <span class="kicker">The app</span>
+      <h2>See it in action</h2>
+      <p class="lead">Screenshots from the current beta, shown with sample data.</p>
+      <div class="shots">
+        <div class="shot">
+          <div class="phone"><img src="assets/trends.png" alt="Trends screen with HRV and resting heart rate chart over seven days" loading="lazy" width="1206" height="2622"></div>
+          <h4>Trends</h4>
+          <p>The recovery pair at a glance: HRV up, resting HR down means the training is landing.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/training.png" alt="Training screen showing a half marathon plan with phases and this week's sessions" loading="lazy" width="1206" height="2622"></div>
+          <h4>Training plans</h4>
+          <p>A ten-week half marathon build: base, build, peak, taper, and every session zoned.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/coach.png" alt="Coach screen with an AI conversation about swapping interval and easy run days" loading="lazy" width="1206" height="2622"></div>
+          <h4>AI coach</h4>
+          <p>Grounded in your data: it saw the long run, checked your HRV and sleep, and offered to reshuffle the week.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/training_scrolled.png" alt="Weekly load chart showing planned versus completed hours per week across the plan" loading="lazy" width="1206" height="2622"></div>
+          <h4>Weekly load</h4>
+          <p>Planned vs completed hours across the whole plan, colored by phase.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/activity.png" alt="Calendar view of planned workouts with plan adherence summary" loading="lazy" width="1206" height="2622"></div>
+          <h4>Calendar and adherence</h4>
+          <p>Every planned session on a calendar, with adherence tracked as you complete them.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/today.png" alt="Today screen with sleep score ring and daily metrics" loading="lazy" width="1206" height="2622"></div>
+          <h4>Today</h4>
+          <p>Your morning report: sleep score, HRV, resting HR, and the day's activity as it builds.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="recovery">
+      <span class="kicker">Return to sport</span>
+      <h2>Rehab with data, not guesswork</h2>
+      <p class="lead">Users recovering from surgery or injury get a dedicated Recovery hub: phase-based protocols, morning check-ins, pain logging, and an honest analysis of whether training is driving pain.</p>
+      <div class="shots">
+        <div class="shot">
+          <div class="phone"><img src="assets/recovery.png" alt="Recovery screen showing week 16 post-op, phase 3 strength and neuromuscular control, morning check-in, and pain logging" loading="lazy" width="1206" height="2622"></div>
+          <h4>Recovery hub</h4>
+          <p>Where you are in your protocol, what this phase is for, and a ten-second pain log.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/pain_context.png" alt="Pain trend screen with average pain by context and pain by activity type charts" loading="lazy" width="1206" height="2622"></div>
+          <h4>Does training drive pain?</h4>
+          <p>Every pain log is bucketed by context: rest day, after training, or the day after. The charts answer the question your PT keeps asking.</p>
+        </div>
+        <div class="shot">
+          <div class="phone"><img src="assets/pain_trend.png" alt="Pain over time chart with training volume overlay and a plain-language conclusion" loading="lazy" width="1206" height="2622"></div>
+          <h4>Pain vs load, over time</h4>
+          <p>Pain plotted against training volume, with a plain-language conclusion that sharpens with every log.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="data">
+      <span class="kicker">Your data</span>
+      <h2>Built on the watch you already wear</h2>
+      <p class="lead">Rebuild reads the metrics your devices already record, with your explicit permission, and uses them for one thing only: powering your own dashboard, plans, and coaching.</p>
+      <div class="sources">
+        <span class="pill">Apple Health <small>- sleep, heart rate, workouts, steps</small></span>
+        <span class="pill">Garmin <small>- via Apple Health today, official API planned</small></span>
+        <span class="pill">WHOOP <small>- recovery, strain, and sleep via official OAuth</small></span>
+      </div>
+      <div class="privacy-strip">
+        <span class="icon">&#128274;</span>
+        <div>
+          <h3>Private by default</h3>
+          <p>Your data is encrypted in transit and at rest, never sold, and never shared with advertisers. Connections use each vendor's official consent flow, you can disconnect at any time, and deleting your account erases everything. Read the full <a href="/privacy/">privacy policy</a>.</p>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="cols">
+      <div>
+        <p><strong style="color:#f2f2f5">Rebuild</strong> - recovery and training, built on your own data.</p>
+        <p>&copy; 2026 Rebuild. All rights reserved.</p>
+      </div>
+      <div>
+        <p><a href="/privacy/">Privacy policy</a></p>
+        <p><a href="mailto:muratzamir@rebuildandtrain.com">muratzamir@rebuildandtrain.com</a></p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
